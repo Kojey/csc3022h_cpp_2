@@ -1,0 +1,15 @@
+MAKEFILES RULES
+* Each file (driver and interface.cpp) has a least two rules:
+	* make : to compile
+	* make clean : to clean ("make clean" of root folder cleans the whole project)
+* The driver file (driver.cpp) has two more rules:
+	* make run : to run the program
+	* make all: to compile the whole project
+FILE'S ROLES
+* libs/interface.cpp: 
+	It contains methods requires that manipulate the database.
+	All the methods contained in a namespace called KNNOTH001.
+	It contains a struct StudentRecord which represents a student's details.
+* driver.cpp:
+	Master of the program.
+	Contains methods that print the menu, take the user's choice and process it.
