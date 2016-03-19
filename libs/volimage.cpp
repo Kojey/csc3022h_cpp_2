@@ -148,8 +148,41 @@ int VolImage::volImageSize(void){
 	return size;
 }
 
-void VolImage::g_extract(int sliceId, std::string output_prefix){
-
+void VolImage::g_extract(int row, std::string output_prefix){
+	/*
+	 * extract slice sliceId and write to output
+	 */
+	using namespace std;
+	size=0;
+	// open an output.data file
+	ofstream file(output_prefix+".data");
+	if(file.is_open()){ // write width, height and number_of_slices=1
+		file << width << " ";
+		file << height << " ";
+		file << 1;
+		file.close();
+	}
+	else {
+		cout << "Unable to open file " << output_prefix << ".data" << endl;
+	}
+	// open an output.raw file in binary mode
+	file.open(output_prefix+".raw", ios::binary);
+	if(file.is_open()){
+		int i,w;
+		// loop through the slice and write each byte to it
+		size+=sizeof(slices.at(0))*number;	// size of the pointer to the 2D array
+		for(i=0; i<number; i++){
+			size+=sizeof(slices.at(i)[row]);	// size of 1D array
+			for(w=0; w<width; w++){
+				file << slices.at(i)[row][w];
+				size+= sizeof(slices.at(i)[row][w]);	// size of an unsigned char
+			}
+		}
+		file.close();
+	}
+	else {
+		cout << "Unable to open file " << output_prefix << ".raw" << endl;
+	}
 
 }
 
