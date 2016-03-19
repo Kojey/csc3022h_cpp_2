@@ -24,7 +24,7 @@ int main(int argc, char * argv[]){
 			printInfo("volimage <imageBase> [-g i]",vol.volImageSize());
 			break;
 		case 6:
-			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[2] || string(argv[3])!= cmd_arg[1]) return 0;
+			if(string(argv[1])!=cmd_arg[0] || ( string(argv[3])!= cmd_arg[2] && string(argv[3])!= cmd_arg[1]) ) return 0;
 			if(string(argv[3])== cmd_arg[2]){
 				istringstream ss(argv[4]);
 				int i;ss >> i;
@@ -33,8 +33,8 @@ int main(int argc, char * argv[]){
 			}
 			else if(string(argv[3])== cmd_arg[1]){
 				istringstream ss(argv[4]);
-				int i;ss >> i;
-				vol.g_extract(i, string(argv[5]));
+				int row;ss >> row;
+				vol.g_extract(row, string(argv[5]));
 				printInfo("volimage <imageBase> [-g i output_file_name]",vol.volImageSize());
 			}
 			break;
