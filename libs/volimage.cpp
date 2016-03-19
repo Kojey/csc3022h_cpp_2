@@ -11,10 +11,18 @@
 
 
 VolImage::VolImage(){
-
+	width=0;
+	height=0;
 } // default constructor - define in .cpp
 
 VolImage::~VolImage(){
+	int i,h;
+	for(i=0; i<slices.size(); i++){
+		for(h=0; h<height; h++){
+			delete [] (slices.at(i))[h];
+		}
+		delete [] slices.at(i);
+	}
 
 } // destructor - define in .cpp file
 
