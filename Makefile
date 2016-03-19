@@ -19,7 +19,7 @@ $(EXE_NAME): driver.o
 
 #Never submit binaries to your git repo or vula, so create a rule for cleaning up the binary objects just leaving your source code behind
 clean:
-	rm *.o driver
+	rm *.o driver *.raw *.data
 	cd libs && make clean
 # build entire project
 all:
