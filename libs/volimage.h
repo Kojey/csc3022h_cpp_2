@@ -10,7 +10,10 @@
 
 #include <vector>
 #include <string>
-
+static int size=0;
+static int number=0;
+int getNumber(void);
+void printInfo(std::string methodString, int _size);
 class VolImage
 {
 private: // private members
@@ -26,6 +29,7 @@ public: // public members
 	void diffmap(int sliceI, int sliceJ, std::string output_prefix);
 // extract slice sliceId and write to output - define in .cpp
 	void extract(int sliceId, std::string output_prefix);
+	void g_extract(int sliceId, std::string output_prefix);
 // number of bytes uses to store image data bytes
 //and pointers (ignore vector<> container, dims etc)
 	int volImageSize(void); // define in .cpp
