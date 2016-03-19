@@ -26,12 +26,11 @@ VolImage::~VolImage(){
 
 } // destructor - define in .cpp file
 
-// populate the object with images in stack and
-//set member variables define in .cpp
-
 bool VolImage::readImages(std::string baseName) {
+	/*
+	 * populate the object with images in stack and set member variables
+	 */
 	using namespace std;
-	int number;
 	// read .data file first
 	ifstream file((baseName+".data").c_str());
 	if(!file){
@@ -53,12 +52,15 @@ bool VolImage::readImages(std::string baseName) {
 			return false;
 		}
 		unsigned char ** array = new unsigned char * [height]; // create pointer to pointer of unsigned char
+		size+=sizeof(array);
 		for(h=0; h<height; h++){
 			array[h] = new unsigned char [width];	// create pointer to unsigned char
+			size+=sizeof(array[h]);
 			for(w=0; w<width; w++) {
 				if(!file.eof()){
 					char * ptr = (char *) &array[h][w];	// typecast unsigned char to char for .read() method
-					file.read(ptr,1);
+					file.read(ptr,1);	// add a byte to the array
+					size+=1;
 				}
 			}
 		}
@@ -68,8 +70,10 @@ bool VolImage::readImages(std::string baseName) {
 	return true;
 }
 
-// compute difference map and write out; define in .cpp
 void VolImage::diffmap(int sliceI, int sliceJ, std::string output_prefix) {
+	/*
+	 * compute difference map and write out
+	 */
 	using namespace std;
 	// open an output.data file
 	ofstream file(output_prefix+".data");
@@ -99,15 +103,19 @@ void VolImage::diffmap(int sliceI, int sliceJ, std::string output_prefix) {
 	}
 }
 
-// extract slice sliceId and write to output - define in .cpp
 void VolImage::extract(int sliceId, std::string output_prefix){
+	/*
+	 * extract slice sliceId and write to output
+	 */
 	using namespace std;
+	size=0;
+	number=1;
 	// open an output.data file
 	ofstream file(output_prefix+".data");
 	if(file.is_open()){ // write width, height and number_of_slices=1
 		file << width << " ";
 		file << height << " ";
-		file << 1;
+		file << number;
 		file.close();
 	}
 	else {
@@ -118,9 +126,12 @@ void VolImage::extract(int sliceId, std::string output_prefix){
 	if(file.is_open()){
 		int h,w;
 		// loop through the slice and write each byte to it
+		size+=sizeof(slices.at(sliceId));	// size of the pointer to the 2D array
 		for(h=0; h<height; h++){
+			size+=sizeof(slices.at(sliceId)[h]);	// size of 1D array
 			for(w=0; w<width; w++){
 				file << slices.at(sliceId)[h][w];
+				size+= sizeof(slices.at(sliceId)[h][w]);	// size of an unsigned char
 			}
 		}
 		file.close();
@@ -130,8 +141,27 @@ void VolImage::extract(int sliceId, std::string output_prefix){
 	}
 }
 
-// number of bytes uses to store image data bytes
-//and pointers (ignore vector<> container, dims etc)
 int VolImage::volImageSize(void){
+	/*
+	 * number of bytes uses to store image data bytes and pointers (ignore vector<> container, dims etc)
+	 */
+	return size;
+}
 
+void VolImage::g_extract(int sliceId, std::string output_prefix){
+
+
+}
+
+int getNumber(void){
+	return number;
+}
+
+void printInfo(std::string methodString, int _size){
+	using namespace std;
+	cout << methodString << endl;
+	cout << "Number of images : ";
+	cout << getNumber() << endl;
+	cout << "Number of bytes required : ";
+	cout << _size << endl;
 }
