@@ -6,39 +6,44 @@
 
 #include <iostream>
 #include <sstream>
+#include "volimage.h"
+#include "libs/volimage.h"
 
 void clear();
 
 int main(int argc, char * argv[]){
 	using namespace std;
 	string cmd_arg[4] = {"volimage", "-g", "-x", "-d"};
-	// Read argc from commande line
+	VolImage vol;
+	// Read argc from command line
 	switch(argc){
 		case 3:	// volimage <imageBase>
-			cout << "volimage <imageBase>" << endl;
-			if(string(argv[1])!=cmd_arg[0]) return 1;	// wrong argument name
+			cout<<"volimage <imageBase>"<<endl;
+			vol.readImages(string(argv[2]));
+			if(string(argv[1])!=cmd_arg[0]) return 0;	// wrong argument name
 			break;
 		case 5:	// volimage <imageBase> [-g i]
-			cout << "volimage <imageBase> [-g i]" << endl;
-			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[1]) return 1;	// Wrong argument names
-			{
+			cout<<"volimage <imageBase> [-g i]"<<endl;
+			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[1]) return 0;	// Wrong argument names
+/*			{
 				istringstream ss(argv[4]);
 				int i;
 				ss >> i;
 				cout << "integer i = " << i << endl;
-			}
+			}*/
 			break;
-		case 6:	// 1volimage <imageBase> [-x i output_file_name]
-			cout << "volimage <imageBase> [-x i output_file_name]" << endl;
-			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[2]) return 1;
+		case 6:	// volimage <imageBase> [-x i output_file_name]
+			cout<<"volimage <imageBase> [-x i output_file_name]"<<endl;
+			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[2]) return 0;
 			break;
 		case 7:	// volimage <imageBase> [-d i j output_file_name]
-			cout << "volimage <imageBase> [-d i j output_file_name]" << endl;
-			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[3]) return 1;
+			cout<<"volimage <imageBase> [-d i j output_file_name]"<<endl;
+			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[3]) return 0;
 			break;
 		default:
-			cout << "Wrong arguments" << endl;
-			return 1;
+			cout<<"default"<<endl;
+			cout << argc << endl;
+			return 0;
 	}
 
 	return 0;
