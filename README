@@ -1,0 +1,20 @@
+MAKEFILES RULES
+* Each file (driver and interface.cpp) has a least two rules:
+	* make : to compile
+	* make clean : to clean ("make clean" of root folder cleans the whole project)
+* The driver file (driver.cpp) has two more rules:
+	* make run args="see template bellow": to run the program
+	* make all: to compile the whole project
+FILE'S ROLES
+* libs/volimage.cpp: 
+	It contains methods requires that modify/load images to memory.
+* driver.cpp:
+	Master of the program.
+	Analyse command line argument provided and perform required task
+	based on the arguments
+COMMAND LINE ARGUMENTS TEMPLATE:
+args=
+	* volimage <imageBase>
+	* volimage <imageBase> [-x i output_file_name]
+	* volimage <imageBase> [-g i output_file_name]
+	* volimage <imageBase> [-d i j output_file_name]
