@@ -70,7 +70,33 @@ bool VolImage::readImages(std::string baseName) {
 
 // compute difference map and write out; define in .cpp
 void VolImage::diffmap(int sliceI, int sliceJ, std::string output_prefix) {
-
+	using namespace std;
+	// open an output.data file
+	ofstream file(output_prefix+".data");
+	if(file.is_open()){ // write width, height and number_of_slices=1
+		file << width << " ";
+		file << height << " ";
+		file << 1;
+		file.close();
+	}
+	else {
+		cout << "Unable to open file " << output_prefix << ".data" << endl;
+	}
+	// open an output.raw file in binary mode
+	file.open(output_prefix+".raw", ios::binary);
+	if(file.is_open()){
+		int h,w;
+		// loop through the slice and write each byte to it
+		for(h=0; h<height; h++){
+			for(w=0; w<width; w++){
+				file << (unsigned char) abs((int)((float) (slices.at(sliceI))[h][w]-(float) (slices.at(sliceJ)[h][w]))/2);
+			}
+		}
+		file.close();
+	}
+	else {
+		cout << "Unable to open file " << output_prefix << ".raw" << endl;
+	}
 }
 
 // extract slice sliceId and write to output - define in .cpp
