@@ -8,8 +8,6 @@
 #include <sstream>
 #include "libs/volimage.h"
 
-void clear();
-
 int main(int argc, char * argv[]){
 	using namespace std;
 	string cmd_arg[4] = {"volimage", "-g", "-x", "-d"};
@@ -17,41 +15,44 @@ int main(int argc, char * argv[]){
 	if( argc > 2) vol.readImages(string(argv[2]));
 	// Read argc from command line
 	switch(argc){
-		case 3:	// volimage <imageBase>
-			cout<<"volimage <imageBase>"<<endl;
+		case 3:
 			if(string(argv[1])!=cmd_arg[0]) return 0;	// wrong argument name
+			printInfo("volimage <imageBase>",vol.volImageSize());
 			break;
-		case 5:	// volimage <imageBase> [-g i]
-			cout<<"volimage <imageBase> [-g i]"<<endl;
+		case 5:
 			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[1]) return 0;	// Wrong argument names
+			printInfo("volimage <imageBase> [-g i]",vol.volImageSize());
 			break;
-		case 6:	// volimage <imageBase> [-x i output_file_name]
-			cout<<"volimage <imageBase> [-x i output_file_name]"<<endl;
-			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[2]) return 0;
-			{
+		case 6:
+			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[2] || string(argv[3])!= cmd_arg[1]) return 0;
+			if(string(argv[3])== cmd_arg[2]){
 				istringstream ss(argv[4]);
 				int i;ss >> i;
 				vol.extract(i, string(argv[5]));
-			}break;
-		case 7:	// volimage <imageBase> [-d i j output_file_name]
-			cout<<"volimage <imageBase> [-d i j output_file_name]"<<endl;
+				printInfo("volimage <imageBase> [-x i output_file_name]",vol.volImageSize());
+			}
+			else if(string(argv[3])== cmd_arg[1]){
+				istringstream ss(argv[4]);
+				int i;ss >> i;
+				vol.g_extract(i, string(argv[5]));
+				printInfo("volimage <imageBase> [-g i output_file_name]",vol.volImageSize());
+			}
+			break;
+		case 7:
 			if(string(argv[1])!=cmd_arg[0] || string(argv[3])!= cmd_arg[3]) return 0;
 			{
 				istringstream ss(argv[4]);
 				int i,j;
-				string _i,_j;
-				ss >> i; _i = ss.str();
-				ss.clear();ss.str(argv[5]);ss >> j; _j = ss.str();
+				ss >> i;
+				ss.clear();ss.str(argv[5]);ss >> j;
 				vol.diffmap(i,j, string(argv[6]));
 			}
+			printInfo("volimage <imageBase> [-d i j output_file_name]",vol.volImageSize());
 			break;
 		default:
-			cout<<"default"<<endl;
-			cout << argc << endl;
+			cout<<"Wrong arguments"<<endl;
 			return 0;
 	}
 
 	return 0;
 }
-
-void clear(void) { system("clear"); }
